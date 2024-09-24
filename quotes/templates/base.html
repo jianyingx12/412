@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'quotes/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Inspirational Quotes by Madea</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'main_page' %}">Home</a></li>
+                <li><a href="{% url 'show_all' %}">Show All</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        <h3>Created by Jianying Liu</h3>
+    </footer>
+</body>
+</html>
