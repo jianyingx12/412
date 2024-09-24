@@ -27,6 +27,7 @@ IMAGES = [
 ]
 
 # display one random quote and image
+# Function to handle the URL request for /quotes (home page).
 def quotes(request):
     random_quote = random.choice(QUOTES)
     random_image = random.choice(IMAGES)
@@ -37,6 +38,7 @@ def quotes(request):
     return render(request, 'quotes/quote.html', context)
 
 # display all images and quotes
+# Function to handle the URL request for /show_all.
 def show_all(request):
     context = {
         'quotes': QUOTES,
@@ -45,6 +47,7 @@ def show_all(request):
     return render(request, 'quotes/show_all.html', context)
 
 # display info about the person
+# Function to handle the URL request for /about.
 def about(request):
     bio_info = "Mabel “Madea” Simmons is a fictional character created by Tyler Perry, known for her tough love and sharp wit. She first appeared in 1999 in a play called I Can Do Bad All by Myself and has since starred in numerous films. Madea is beloved for her hilarious take on life's challenges."
     creator_info = "Created by Jianying Liu, a CS student who likes comedy shows."
