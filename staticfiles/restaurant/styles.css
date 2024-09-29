@@ -1,0 +1,146 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4; /* Light background for contrast */
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2, h3 {
+    color: #d92b04; /* Reddish color for headings to match ramen theme */
+}
+
+p {
+    color: #333;
+    line-height: 1.6;
+}
+
+/* Header and Navigation */
+header {
+    background-color: #d92b04; /* Same red as headings */
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 24px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Main Content */
+main {
+    padding: 20px;
+    background-color: white;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 1200px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer */
+footer {
+    background-color: #d92b04;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+}
+
+/* Forms */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+fieldset {
+    border: 1px solid #ccc;
+    padding: 15px;
+    background-color: #f9f9f9;
+}
+
+legend {
+    font-weight: bold;
+    color: #d92b04;
+}
+
+label {
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Buttons */
+input[type="submit"] {
+    background-color: #d92b04;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover {
+    background-color: #b82403; /* Darker red on hover */
+}
+
+/* Specific Styles for Pages */
+.order-summary ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.order-summary li {
+    padding: 10px 0;
+}
+
+.order-summary li p {
+    margin: 0;
+}
+
+fieldset div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+fieldset div label {
+    flex: 1 1 45%; /* Display toppings and items in two columns */
+}
+
+fieldset div input[type="checkbox"] {
+    margin-right: 5px;
+}

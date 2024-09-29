@@ -1,0 +1,93 @@
+{% extends 'restaurant/base.html' %}
+
+{% block content %}
+    <h2>Order Your Favorite Ramen!</h2>
+    
+    <form method="POST" action="{% url 'confirmation' %}">
+        {% csrf_token %}
+        
+        <fieldset>
+            <legend>Menu</legend>
+            <p>Daily Special: {{ daily_special }}</p>
+            <p>Toppings are extra 500 dollars</p>
+            
+            <div>
+                <label>
+                    <input type="checkbox" name="items" value="Miso Chashu Ramen"> Miso Chashu Ramen - 2250 dollars
+                </label><br>
+                <input type="checkbox" name="Miso Chashu Ramen_toppings" value="Extra Pork"> Extra Pork
+                <input type="checkbox" name="Miso Chashu Ramen_toppings" value="Egg"> Egg
+                <input type="checkbox" name="Miso Chashu Ramen_toppings" value="Seaweed"> Seaweed
+                <input type="checkbox" name="Miso Chashu Ramen_toppings" value="Corn"> Corn
+            </div>
+    
+            <div>
+                <label>
+                    <input type="checkbox" name="items" value="Spicy Ramen"> Spicy Ramen - 3234 dollars
+                </label><br>
+                <input type="checkbox" name="Spicy Ramen_toppings" value="Extra Pork"> Extra Pork
+                <input type="checkbox" name="Spicy Ramen_toppings" value="Egg"> Egg
+                <input type="checkbox" name="Spicy Ramen_toppings" value="Seaweed"> Seaweed
+                <input type="checkbox" name="Spicy Ramen_toppings" value="Corn"> Corn
+            </div>
+
+            <div>
+                <label>
+                    <input type="checkbox" name="items" value="Shio Ramen"> Shio Ramen - 2000 dollars
+                </label><br>
+                <input type="checkbox" name="Shio Ramen_toppings" value="Extra Pork"> Extra Pork
+                <input type="checkbox" name="Shio Ramen_toppings" value="Egg"> Egg
+                <input type="checkbox" name="Shio Ramen_toppings" value="Seaweed"> Seaweed
+                <input type="checkbox" name="Shio Ramen_toppings" value="Corn"> Corn
+            </div>
+
+            <div>
+                <label>
+                    <input type="checkbox" name="items" value="Tonkotsu Ramen"> Tonkotsu Ramen - 2349 dollars
+                </label><br>
+                <input type="checkbox" name="Tonkotsu Ramen_toppings" value="Extra Pork"> Extra Pork
+                <input type="checkbox" name="Tonkotsu Ramen_toppings" value="Egg"> Egg
+                <input type="checkbox" name="Tonkotsu Ramen_toppings" value="Seaweed"> Seaweed
+                <input type="checkbox" name="Tonkotsu Ramen_toppings" value="Corn"> Corn
+            </div>
+
+            <div>
+                <label>
+                    <input type="checkbox" name="items" value="Naruto Ramen Special"> Naruto Ramen Special - 3553 dollars
+                </label><br>
+                <input type="checkbox" name="Naruto Ramen Special_toppings" value="Extra Pork"> Extra Pork
+                <input type="checkbox" name="Naruto Ramen Special_toppings" value="Egg"> Egg
+                <input type="checkbox" name="Naruto Ramen Special_toppings" value="Seaweed"> Seaweed
+                <input type="checkbox" name="Naruto Ramen Special_toppings" value="Corn"> Corn
+            </div>
+
+            <div>
+                <label>
+                    <input type="checkbox" name="items" value="{{ daily_special }}"> {{ daily_special }} - 9999 yen
+                </label><br>
+                <input type="checkbox" name="{{ daily_special }}_toppings" value="Extra Pork"> Extra Pork
+                <input type="checkbox" name="{{ daily_special }}_toppings" value="Egg"> Egg
+                <input type="checkbox" name="{{ daily_special }}_toppings" value="Seaweed"> Seaweed
+                <input type="checkbox" name="{{ daily_special }}_toppings" value="Corn"> Corn
+            </div>
+            <input type="hidden" name="daily_special_name" value="{{ daily_special }}">            
+        </fieldset>
+
+        <fieldset>
+            <legend>Customer Information</legend>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="phone">Phone:</label>
+            <input type="tel" id="phone" name="phone" required><br>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required><br>
+
+            <label for="special_instructions">Special Instructions:</label><br>
+            <textarea id="special_instructions" name="special_instructions" rows="4" cols="50"></textarea>
+        </fieldset>
+
+        <input type="submit" value="Submit Order">
+    </form>
+{% endblock %}
