@@ -1,24 +1,71 @@
 body {
     font-family: 'Arial', sans-serif;
-    background-color: #f4f4f4; /* Light background for contrast */
+    background-color: #f4f4f4; 
     margin: 0;
     padding: 0;
 }
 
-h1, h2, h3 {
-    color: #d92b04; /* Reddish color for headings to match ramen theme */
+h1 {
+    color: #f4f4f4,
+}
+
+h2, h3 {
+    color: #d92b04; 
+}
+
+h4{
+    text-align: center;
+    color: #d92b04;
+    font-size: 20px;
 }
 
 p {
     color: #333;
-    line-height: 1.6;
 }
 
-/* Header and Navigation */
+.p1 {
+    color: #333;
+    text-align: center;
+}
+
+.p2 {
+    color: #d92b04;
+    text-align: center;
+    font-size: 40px;
+}
+
+table {
+    width: auto;                
+    margin-left: auto;          
+    margin-right: auto;        
+    border-collapse: collapse;  
+    margin-top: 20px;          
+    margin-bottom: 20px;       
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;           
+    border: 1px solid #ddd;     
+}
+
+th {
+    background-color: #f4f4f4;  
+    color: #333;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 600px;   
+    height: auto;  
+}
+
 header {
-    background-color: #d92b04; /* Same red as headings */
+    background-color: #d92b04; 
     color: white;
-    padding: 10px 0;
+    padding: 1px 0;
     text-align: center;
     font-size: 24px;
 }
@@ -43,28 +90,23 @@ nav ul li a:hover {
     text-decoration: underline;
 }
 
-/* Main Content */
 main {
     padding: 20px;
     background-color: white;
     margin: 20px auto;
     width: 90%;
     max-width: 1200px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Footer */
 footer {
     background-color: #d92b04;
     color: white;
     text-align: center;
     padding: 10px 0;
-    position: fixed;
     width: 100%;
     bottom: 0;
 }
 
-/* Forms */
 form {
     display: flex;
     flex-direction: column;
@@ -101,7 +143,6 @@ input[type="checkbox"] {
     margin-right: 10px;
 }
 
-/* Buttons */
 input[type="submit"] {
     background-color: #d92b04;
     color: white;
@@ -110,25 +151,10 @@ input[type="submit"] {
     font-size: 18px;
     cursor: pointer;
     border-radius: 5px;
-    transition: background-color 0.3s;
 }
 
 input[type="submit"]:hover {
-    background-color: #b82403; /* Darker red on hover */
-}
-
-/* Specific Styles for Pages */
-.order-summary ul {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-.order-summary li {
-    padding: 10px 0;
-}
-
-.order-summary li p {
-    margin: 0;
+    background-color: #b82403; 
 }
 
 fieldset div {
@@ -138,9 +164,5 @@ fieldset div {
 }
 
 fieldset div label {
-    flex: 1 1 45%; /* Display toppings and items in two columns */
-}
-
-fieldset div input[type="checkbox"] {
-    margin-right: 5px;
+    flex: 1 1 45%; 
 }
