@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.urls import reverse
 
 # Create your models here.
 
@@ -7,8 +8,9 @@ class Profile(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
+    bio = models.CharField(max_length=500, blank=True, null=True)
     email = models.EmailField(max_length=254)
-    profile_image_url = models.URLField(max_length=200)
+    profile_image_url = models.URLField()
 
     def __str__(self):
         '''Return a string representation of this object.'''
@@ -19,6 +21,9 @@ class Profile(models.Model):
 
         messages = StatusMessage.objects.filter(profile=self).order_by('-timestamp')
         return messages
+    
+    def get_absolute_url(self):
+        return reverse('show_profile', kwargs={'pk': self.pk})
 
 class StatusMessage(models.Model):
     timestamp = models.DateTimeField(default=timezone.now)

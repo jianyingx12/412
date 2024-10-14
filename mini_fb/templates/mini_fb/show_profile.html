@@ -21,6 +21,10 @@
         <td>{{ profile.bio }}</td>
     </tr>
     <tr>
+        <td>Email:</td>
+        <td>{{ profile.email }}</td>
+    </tr>
+    <tr>
         <td>Profile Image:</td>
         <td><img src="{{ profile.profile_image_url }}" alt="{{ profile.first_name }}'s image" width="300"></td>
     </tr>
@@ -39,5 +43,9 @@
     <p>No status messages.</p>
 {% endif %}
 
-<a href="{% url 'show_all_profiles' %}">Back to all profiles</a>
+<h4>
+    <a href="{% url 'create_status' profile.pk %}">Post a Status</a>
+    <a href="{% url 'show_all_profiles' %}">Back to all profiles</a>
+</h4>
+
 {% endblock %}

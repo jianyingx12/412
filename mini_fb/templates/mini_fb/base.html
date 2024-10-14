@@ -4,12 +4,15 @@
 <html lang="en">
 <head>
     <title>Mini FB</title>
-    <link rel="stylesheet" href="{% static 'mini_fb/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'mini_fb/styles.css' %}?v={{ timestamp }}">
 </head>
 
 <body>
     <header>
         <h1>Welcome to MiniFaceBook</h1>
+        <nav>
+            <a href="{% url 'create_profile' %}">Create a New Profile</a>
+        </nav>
     </header>
     
     <div>
