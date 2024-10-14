@@ -5,6 +5,8 @@ from django.urls import reverse
 # Create your models here.
 
 class Profile(models.Model):
+    '''Encapsulate the idea of one profile'''
+    # data attributes of an Article:
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     city = models.CharField(max_length=100)
@@ -26,6 +28,11 @@ class Profile(models.Model):
         return reverse('show_profile', kwargs={'pk': self.pk})
 
 class StatusMessage(models.Model):
+    '''
+    Encapsulate the idea of a status message on a profile.
+    '''
+
+    # model the 1 to many relationship with profile (foreign key)
     timestamp = models.DateTimeField(default=timezone.now)
     message = models.TextField()
     profile = models.ForeignKey('Profile', on_delete=models.CASCADE, related_name='status_messages')
