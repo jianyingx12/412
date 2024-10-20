@@ -60,3 +60,5 @@ class Image(models.Model):
     
     def __str__(self):
         return f'Image for StatusMessage {self.status_message.id} at {self.timestamp}'
+    
+
