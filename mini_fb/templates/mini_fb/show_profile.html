@@ -36,12 +36,21 @@
     {% for status in profile.get_status_messages %}
         <li>
             <strong>{{ status.timestamp }}:</strong> {{ status.message }}
+            
+            {% if status.get_images %}
+                <div>
+                    {% for img in status.get_images %}
+                        <img src="{{ img.image_file.url }}" alt="Status Image" width="300">
+                    {% endfor %}
+                </div>
+            {% endif %}
         </li>
     {% endfor %}
     </ul>
 {% else %}
     <p>No status messages.</p>
 {% endif %}
+
 
 <h4>
     <a href="{% url 'create_status' profile.pk %}">Post a Status</a>

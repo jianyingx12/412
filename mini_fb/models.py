@@ -39,3 +39,24 @@ class StatusMessage(models.Model):
 
     def __str__(self):
         return f'Status by {self.profile.first_name} at {self.timestamp}: {self.message}'
+    
+    def get_images(self):
+        '''Return all images associated with this status message.'''
+        return self.images.all()  # 'images' is the related_name from the Image model
+    
+class Image(models.Model):
+    '''
+    Encapsulate the idea of an image file that is uploaded and related to a status message.
+    '''
+    
+    # ForeignKey linking to StatusMessage
+    status_message = models.ForeignKey('StatusMessage', on_delete=models.CASCADE, related_name='images')
+    
+    # Image field to upload image files
+    image_file = models.ImageField(blank=True)  
+    
+    # Timestamp of when the image was uploaded
+    timestamp = models.DateTimeField(default=timezone.now)
+    
+    def __str__(self):
+        return f'Image for StatusMessage {self.status_message.id} at {self.timestamp}'
