@@ -78,14 +78,13 @@ img {
     object-fit: cover;
 }
 
-
 form {
     width: 100%;
     max-width: 600px;
     margin: auto;
 }
 
-input[type="text"], input[type="url"], textarea {
+input[type="text"], input[type="email"], input[type="url"], textarea {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -94,7 +93,7 @@ input[type="text"], input[type="url"], textarea {
 }
 
 button {
-    background-color: blue;
+    background-color: #4CAF50;
     color: white;
     padding: 10px 15px;
     border: none;
@@ -105,6 +104,35 @@ button {
 
 button:hover {
     background-color: #45a049;
+}
+
+.btn {
+    background-color: #4CAF50; 
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-block;     
+    margin-right: 10px;       
+}
+
+.btn:hover {
+    background-color: #45a049;
+    text-decoration: none;
+}
+
+.button-container {
+    display: inline-block;
+    text-align: left;
+    margin-left: 0;  
+    padding-left: 0;
+}
+
+button, .btn {
+    box-sizing: border-box; 
+    width: auto;           
 }
 
 a {
