@@ -50,7 +50,7 @@ class CreateStatusMessageView(CreateView):
         # find the profile identified by the PK from the URL pattern
         profile = Profile.objects.get(pk=self.kwargs['pk'])
 
-        # attach this profile to the instance of the Comment to set its FK
+        # attach this profile to the instance of the Comment 
         form.instance.profile = profile
 
         # Save the status message
@@ -88,8 +88,7 @@ class DeleteStatusMessageView(DeleteView):
 
     def get_success_url(self):
         # Redirect to the profile page after deletion
-        profile_id = self.object.profile.pk
-        return reverse('show_profile', kwargs={'pk': profile_id})
+        return reverse('show_profile', kwargs={'pk': self.object.profile.pk})
     
 class UpdateStatusMessageView(UpdateView):
     model = StatusMessage
@@ -99,5 +98,4 @@ class UpdateStatusMessageView(UpdateView):
 
     def get_success_url(self):
         # Redirect to the profile page after updating
-        profile_id = self.object.profile.pk
-        return reverse('show_profile', kwargs={'pk': profile_id})
+        return reverse('show_profile', kwargs={'pk': self.object.profile.pk})
