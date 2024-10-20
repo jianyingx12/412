@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import ListView, DetailView, CreateView
-from .models import Profile, StatusMessage
+from .models import Profile, StatusMessage, Image
 from .forms import CreateProfileForm, CreateStatusMessageForm
 from django.urls import reverse
 
@@ -49,8 +49,20 @@ class CreateStatusMessageView(CreateView):
         
         # find the profile identified by the PK from the URL pattern
         profile = Profile.objects.get(pk=self.kwargs['pk'])
+
         # attach this profile to the instance of the Comment to set its FK
         form.instance.profile = profile
+
+        # Save the status message
+        sm = form.save()  
+
+        # Handle the uploaded images
+        files = self.request.FILES.getlist('files')
+        for file in files:
+            # Create an Image object for each uploaded file
+            image = Image(status_message=sm, image_file=file)
+            image.save()  # Save the Image object to the database
+
         # delegate work to superclass version of this method
         return super().form_valid(form)
 
