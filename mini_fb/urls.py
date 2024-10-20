@@ -5,6 +5,7 @@ from .views import ShowAllProfilesView
 from .views import ShowProfilePageView
 from .views import CreateProfileView
 from .views import CreateStatusMessageView
+from .views import UpdateProfileView
 
 # all of the URLs that are part of this app
 urlpatterns = [
@@ -12,4 +13,5 @@ urlpatterns = [
     path(r'profile/<int:pk>/', ShowProfilePageView.as_view(), name='show_profile'),
     path(r'create_profile/', CreateProfileView.as_view(), name='create_profile'),
     path(r'profile/<int:pk>/create_status/', CreateStatusMessageView.as_view(), name='create_status'),
+    path(r'profile/<int:pk>/update/', UpdateProfileView.as_view(), name='update_profile'),
 ]

@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from .models import Profile, StatusMessage, Image
-from .forms import CreateProfileForm, CreateStatusMessageForm
+from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm
 from django.urls import reverse
 
 # Create your views here.
@@ -69,3 +69,13 @@ class CreateStatusMessageView(CreateView):
     def get_success_url(self):
         # find the profile identified by the PK from the URL pattern
         return reverse('show_profile', kwargs={'pk': self.kwargs['pk']})
+    
+class UpdateProfileView(UpdateView):
+    '''Update a profile'''
+    model = Profile
+    form_class = UpdateProfileForm
+    template_name = 'mini_fb/update_profile_form.html'
+
+    def get_success_url(self):
+        # Redirect to the profile page after updating
+        return reverse('show_profile', kwargs={'pk': self.object.pk})
