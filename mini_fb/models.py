@@ -36,6 +36,31 @@ class Profile(models.Model):
             for friend in friends
         ]
         return friend_profiles
+    
+    def add_friend(self, other):
+        # Check for self-friending
+        if self == other:
+            return
+
+        # Check if a Friend relationship already exists
+        existing_friend = Friend.objects.filter(
+            models.Q(profile1=self, profile2=other) | models.Q(profile1=other, profile2=self)
+        ).exists()
+        
+        if not existing_friend:
+            # Create the Friend relationship
+            Friend.objects.create(profile1=self, profile2=other)
+
+    def get_friend_suggestions(self):
+        # Get all profiles except self
+        possible_friends = Profile.objects.exclude(pk=self.pk)
+
+        # Exclude current friends
+        friends = self.get_friends()  
+        friend_ids = [friend.pk for friend in friends]
+        suggestions = possible_friends.exclude(pk__in=friend_ids)
+
+        return suggestions
 
 class StatusMessage(models.Model):
     '''
