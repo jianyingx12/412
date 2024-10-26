@@ -26,6 +26,16 @@ class Profile(models.Model):
     
     def get_absolute_url(self):
         return reverse('show_profile', kwargs={'pk': self.pk})
+    
+    def get_friends(self):
+        friends = Friend.objects.filter(
+            models.Q(profile1=self) | models.Q(profile2=self)
+        )
+        friend_profiles = [
+            friend.profile1 if friend.profile2 == self else friend.profile2
+            for friend in friends
+        ]
+        return friend_profiles
 
 class StatusMessage(models.Model):
     '''
@@ -61,4 +71,10 @@ class Image(models.Model):
     def __str__(self):
         return f'Image for StatusMessage {self.status_message.id} at {self.timestamp}'
     
+class Friend(models.Model):
+    profile1 = models.ForeignKey('Profile', related_name="profile1", on_delete=models.CASCADE)
+    profile2 = models.ForeignKey('Profile', related_name="profile2", on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(default=timezone.now)
 
+    def __str__(self):
+        return f"{self.profile1} & {self.profile2}"

@@ -30,6 +30,17 @@
     </tr>
 </table>
 
+<h3>Friends</h3>
+{% if profile.get_friends %}
+    <ul>
+    {% for friend in profile.get_friends %}
+        <li><a href="{% url 'show_profile' friend.pk %}">{{ friend.first_name }} {{ friend.last_name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>This profile has no friends.</p>
+{% endif %}
+
 <h3>Status Messages</h3>
 {% if profile.get_status_messages %}
     <ul>
