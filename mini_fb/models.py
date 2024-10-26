@@ -28,13 +28,17 @@ class Profile(models.Model):
         return reverse('show_profile', kwargs={'pk': self.pk})
     
     def get_friends(self):
+        # Retrieve all Friend relationships where self is either profile1 or profile2
         friends = Friend.objects.filter(
             models.Q(profile1=self) | models.Q(profile2=self)
         )
+
+        # Extract the other profile from each Friend relationship
         friend_profiles = [
             friend.profile1 if friend.profile2 == self else friend.profile2
             for friend in friends
         ]
+
         return friend_profiles
     
     def add_friend(self, other):
@@ -61,6 +65,17 @@ class Profile(models.Model):
         suggestions = possible_friends.exclude(pk__in=friend_ids)
 
         return suggestions
+    
+    def get_news_feed(self):
+        # Get all friends' profiles
+        friend_profiles = self.get_friends()
+
+        # Combine self and friends' status messages
+        news_feed = StatusMessage.objects.filter(
+            models.Q(profile=self) | models.Q(profile__in=friend_profiles)
+        ).order_by('-timestamp')
+
+        return news_feed
 
 class StatusMessage(models.Model):
     '''
@@ -97,8 +112,15 @@ class Image(models.Model):
         return f'Image for StatusMessage {self.status_message.id} at {self.timestamp}'
     
 class Friend(models.Model):
+    '''
+    Encapsulate the idea of befriending others
+    '''
+
+    # First profile in the friendship
     profile1 = models.ForeignKey('Profile', related_name="profile1", on_delete=models.CASCADE)
+    # Second profile in the friendship
     profile2 = models.ForeignKey('Profile', related_name="profile2", on_delete=models.CASCADE)
+    # Timestamp of when the friendship was created
     timestamp = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

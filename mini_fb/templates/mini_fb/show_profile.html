@@ -34,7 +34,12 @@
 {% if profile.get_friends %}
     <ul>
     {% for friend in profile.get_friends %}
-        <li><a href="{% url 'show_profile' friend.pk %}">{{ friend.first_name }} {{ friend.last_name }}</a></li>
+        <li class="friend-item">
+            <a href="{% url 'show_profile' friend.pk %}" class="friend-link">
+                <img src="{{ friend.profile_image_url }}" alt="{{ friend.first_name }}'s profile image" class="friends-img">
+                {{ friend.first_name }} {{ friend.last_name }}
+            </a>
+        </li>
     {% endfor %}
     </ul>
 {% else %}
@@ -70,6 +75,7 @@
     <a href="{% url 'create_status' profile.pk %}">Post a Status</a>
     <a href="{% url 'show_all_profiles' %}">Back to all profiles</a>
     <a href="{% url 'friend_suggestions' profile.pk %}">Friend Suggestions</a>
+    <a href="{% url 'news_feed' profile.pk %}">View News Feed</a>
 </h4>
 
 {% endblock %}

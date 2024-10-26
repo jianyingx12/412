@@ -6,9 +6,14 @@
 {% if profile.get_friend_suggestions %}
     <ul>
     {% for suggestion in profile.get_friend_suggestions %}
-        <li>
-            <a href="{% url 'show_profile' suggestion.pk %}">{{ suggestion.first_name }} {{ suggestion.last_name }}</a>
-            <a href="{% url 'add_friend' pk=profile.pk other_pk=suggestion.pk %}">Add Friend</a>
+        <li class="suggestion-item">
+            <div class="suggestion-info">
+                <a href="{% url 'show_profile' suggestion.pk %}" class="suggestion-link">
+                    <img src="{{ suggestion.profile_image_url }}" alt="{{ suggestion.first_name }}'s profile image" class="friends-img">
+                    {{ suggestion.first_name }} {{ suggestion.last_name }}
+                </a>
+                <a href="{% url 'add_friend' pk=profile.pk other_pk=suggestion.pk %}" class="add-friend-link">Add Friend</a>
+            </div>
         </li>
     {% endfor %}
     </ul>

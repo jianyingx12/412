@@ -168,3 +168,76 @@ h4 a {
 h4 a:hover {
     text-decoration: underline;
 }
+
+.suggestion-item {
+    list-style: none;
+    margin-bottom: 10px;
+    display: flex;
+    height: 60px;
+    align-items: center;
+}
+
+.suggestion-info {
+    display: flex;
+    align-items: center;
+    width: 100%; 
+}
+
+.suggestion-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #45a049; 
+}
+
+.add-friend-link {
+    margin-left: auto; 
+    text-decoration: none;
+    padding: 5px 10px; 
+}
+
+.friends-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.friend-item {
+    list-style: none;
+    margin-bottom: 10px;
+}
+
+.friend-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.timestamp {
+    font-size: 0.9em; 
+    color: #666; 
+}
+
+.status-item {
+    list-style: none;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.status-header {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+    justify-content: flex-start; 
+    margin: 0;
+    padding: 0;
+}
+
+.status-images {
+    margin-top: 5px; 
+}

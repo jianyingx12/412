@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <title>Mini FB</title>
-    <link rel="stylesheet" href="{% static 'mini_fb/styles.css' %}?v={{ timestamp }}">
+    <link rel="stylesheet" href="{% static 'mini_fb/styles.css' %}?v={{ timestamp|date:'U' }}">
 </head>
 
 <body>
