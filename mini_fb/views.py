@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from .models import Profile, StatusMessage, Image
 from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm
 from django.urls import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 
@@ -18,7 +19,7 @@ class ShowProfilePageView(DetailView):
     template_name = 'mini_fb/show_profile.html'
     context_object_name = 'profile'
 
-class CreateProfileView(CreateView):
+class CreateProfileView(LoginRequiredMixin, CreateView):
     '''Create a profile'''
     model = Profile
     form_class = CreateProfileForm
@@ -27,7 +28,7 @@ class CreateProfileView(CreateView):
     def get_success_url(self):
         return reverse('show_profile', kwargs={'pk': self.object.pk})
     
-class CreateStatusMessageView(CreateView):
+class CreateStatusMessageView(LoginRequiredMixin, CreateView):
     '''
     A view to create a status message on a profile.
     on GET: send back the form to display
@@ -70,17 +71,21 @@ class CreateStatusMessageView(CreateView):
         # find the profile identified by the PK from the URL pattern
         return reverse('show_profile', kwargs={'pk': self.kwargs['pk']})
     
-class UpdateProfileView(UpdateView):
+class UpdateProfileView(LoginRequiredMixin, UpdateView):
     '''Update a profile'''
     model = Profile
     form_class = UpdateProfileForm
     template_name = 'mini_fb/update_profile_form.html'
 
+    def get_queryset(self):
+    # get objects related to the currently logged-in user
+        return Profile.objects.filter(user=self.request.user)
+
     def get_success_url(self):
         # Redirect to the profile page after updating
         return reverse('show_profile', kwargs={'pk': self.object.pk})
 
-class DeleteStatusMessageView(DeleteView):
+class DeleteStatusMessageView(LoginRequiredMixin, DeleteView):
     '''Delete status message'''
     model = StatusMessage 
     template_name = 'mini_fb/delete_status_form.html'
@@ -90,7 +95,11 @@ class DeleteStatusMessageView(DeleteView):
         # Redirect to the profile page after deletion
         return reverse('show_profile', kwargs={'pk': self.object.profile.pk})
     
-class UpdateStatusMessageView(UpdateView):
+    def get_queryset(self):
+        # Limit deletion to the user's own status messages
+        return StatusMessage.objects.filter(profile__user=self.request.user)
+    
+class UpdateStatusMessageView(LoginRequiredMixin, UpdateView):
     '''Update status message'''
     model = StatusMessage
     fields = ['message'] 
@@ -100,6 +109,10 @@ class UpdateStatusMessageView(UpdateView):
     def get_success_url(self):
         # Redirect to the profile page after updating
         return reverse('show_profile', kwargs={'pk': self.object.profile.pk})
+    
+    def get_queryset(self):
+        # Limit updates to the user's own status messages
+        return StatusMessage.objects.filter(profile__user=self.request.user)
     
 class CreateFriendView(View):
     '''Create a Friend'''
