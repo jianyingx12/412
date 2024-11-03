@@ -5,13 +5,7 @@
 
 <form method="POST">
     {% csrf_token %}
-    
-    <!-- Display the UserCreationForm fields -->
-    {{ user_form.as_p }}
-    
-    <!-- Display the CreateProfileForm fields -->
     {{ form.as_p }}
-    
     <button type="submit">Create Profile</button>
 </form>
 

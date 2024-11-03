@@ -11,24 +11,9 @@
     <header>
         <h1>Welcome to MiniFaceBook</h1>
         <nav>
-            {% if user.is_authenticated %}
-                <p>Logged in as: {{ user.username }}</p>
-                {% if user.profile %}
-                    <a href="{% url 'show_profile' user.profile.pk %}">My Profile</a>
-                {% else %}
-                    <a href="{% url 'create_profile' %}">Create Profile</a>
-                {% endif %}
-                <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit">Logout</button>
-                </form>
-            {% else %}
-                <a href="{% url 'login' %}">Login</a>
-                <a href="{% url 'create_profile' %}">Create a New Profile</a> 
-            {% endif %}
-            <a href="{% url 'show_all_profiles' %}">All Profiles</a>
+            <a href="{% url 'create_profile' %}">Create a New Profile</a>
         </nav>
-    </header>    
+    </header>
     
     <div>
         {% block content %}
@@ -39,4 +24,5 @@
         <p>MiniFaceBook</p>
     </footer>
 </body>
+
 </html>
