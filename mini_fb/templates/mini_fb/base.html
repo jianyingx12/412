@@ -13,13 +13,17 @@
         <nav>
             {% if user.is_authenticated %}
                 <p>Logged in as: {{ user.username }}</p>
-                <a href="{% url 'logout' %}">Logout</a>
+                <a href="{% url 'update_profile' %}">My Profile</a>
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
             {% else %}
                 <a href="{% url 'login' %}">Login</a>
             {% endif %}
-            <a href="{% url 'create_profile' %}">Create a New Profile</a>
+            <a href="{% url 'show_all_profiles' %}">All Profiles</a>
         </nav>
-    </header>
+    </header>    
     
     <div>
         {% block content %}

@@ -40,10 +40,9 @@ class CreateStatusMessageView(LoginRequiredMixin, CreateView):
 
     # get the context data from the sueprclass
     def get_context_data(self, **kwargs):
-        # find the profile identified by the PK from the URL pattern
-        # add the profile referred to by the URL into this context
+        # Set the profile to the logged-in user's profile
         context = super().get_context_data(**kwargs)
-        context['profile'] = Profile.objects.get(pk=self.kwargs['pk'])
+        context['profile'] = get_object_or_404(Profile, user=self.request.user)
         return context
 
     def form_valid(self, form):
@@ -68,8 +67,9 @@ class CreateStatusMessageView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        # find the profile identified by the PK from the URL pattern
-        return reverse('show_profile', kwargs={'pk': self.kwargs['pk']})
+        # Redirect to the logged-in user's profile page after creating a status message
+        profile = get_object_or_404(Profile, user=self.request.user)
+        return reverse('show_profile', kwargs={'pk': profile.pk})
     
 class UpdateProfileView(LoginRequiredMixin, UpdateView):
     '''Update a profile'''
@@ -77,9 +77,9 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
     form_class = UpdateProfileForm
     template_name = 'mini_fb/update_profile_form.html'
 
-    def get_queryset(self):
-    # get objects related to the currently logged-in user
-        return Profile.objects.filter(user=self.request.user)
+    def get_object(self):
+        # Get the Profile for the current user or return 404 if not found
+        return get_object_or_404(Profile, user=self.request.user)
 
     def get_success_url(self):
         # Redirect to the profile page after updating
@@ -122,14 +122,26 @@ class CreateFriendView(View):
         profile.add_friend(other_profile)
         return redirect('show_profile', pk=profile.pk)
     
+    def get_object(self):
+        # Get the Profile for the current user or return 404 if not found
+        return get_object_or_404(Profile, user=self.request.user)
+    
 class ShowFriendSuggestionsView(DetailView):
     '''Show Friend Suggestions'''
     model = Profile
     template_name = 'mini_fb/friend_suggestions.html'
     context_object_name = 'profile'
 
+    def get_object(self):
+        # Get the Profile for the current user or return 404 if not found
+        return get_object_or_404(Profile, user=self.request.user)
+
 class ShowNewsFeedView(DetailView):
     '''Show newsfeed'''
     model = Profile
     template_name = 'mini_fb/news_feed.html'
     context_object_name = 'profile'
+
+    def get_object(self):
+        # Get the Profile for the current user or return 404 if not found
+        return get_object_or_404(Profile, user=self.request.user)
