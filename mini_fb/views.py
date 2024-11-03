@@ -4,6 +4,7 @@ from .models import Profile, StatusMessage, Image
 from .forms import CreateProfileForm, CreateStatusMessageForm, UpdateProfileForm
 from django.urls import reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 
@@ -19,11 +20,34 @@ class ShowProfilePageView(DetailView):
     template_name = 'mini_fb/show_profile.html'
     context_object_name = 'profile'
 
-class CreateProfileView(LoginRequiredMixin, CreateView):
+class CreateProfileView(CreateView):
     '''Create a profile'''
     model = Profile
     form_class = CreateProfileForm
     template_name = 'mini_fb/create_profile_form.html'
+
+    # get the context data from the sueprclass
+    def get_context_data(self, **kwargs):
+        # Set the profile to the logged-in user's profile
+        context = super().get_context_data(**kwargs)
+        context['user_form'] = UserCreationForm() 
+        return context
+    
+    def form_valid(self, form):
+        # Create the User instance from the submitted data
+        user_form = UserCreationForm(self.request.POST)
+
+        if user_form.is_valid():
+            user = user_form.save()  # Save the User instance
+
+            # Attach the new User to the Profile
+            form.instance.user = user
+
+            # Proceed with saving the Profile by calling the superclass' form_valid method
+            return super().form_valid(form)
+        else:
+            # If the user_form is not valid, re-render the page with errors
+            return self.form_invalid(form)
 
     def get_success_url(self):
         return reverse('show_profile', kwargs={'pk': self.object.pk})
