@@ -1,11 +1,16 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 # Create your models here.
 
 class Profile(models.Model):
     '''Encapsulate the idea of one profile'''
+
+    # for deletion and a default for existing profiles
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+
     # data attributes of an Article:
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
