@@ -9,7 +9,7 @@ class Profile(models.Model):
     '''Encapsulate the idea of one profile'''
 
     # for deletion and a default for existing profiles
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     # data attributes of an Article:
     first_name = models.CharField(max_length=100)

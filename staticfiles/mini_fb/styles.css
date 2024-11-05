@@ -84,7 +84,7 @@ form {
     margin: auto;
 }
 
-input[type="text"], input[type="email"], input[type="url"], textarea {
+input[type="text"], input[type="email"], input[type="url"], input[type="password"], textarea {
     width: 100%;
     padding: 10px;
     margin: 10px 0;
