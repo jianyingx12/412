@@ -1,0 +1,90 @@
+{% extends "voter_analytics/base.html" %}
+
+{% block content %}
+  <h1>Voter List</h1>
+  
+  <form method="get" action="{% url 'voters' %}">
+    <label for="party_affiliation">Party Affiliation:</label>
+    <select name="party_affiliation" id="party_affiliation">
+      <option value="">All</option>
+      {% for party in party_affiliations %}
+        <option value="{{ party }}">{{ party }}</option>
+      {% endfor %}
+    </select>
+    
+    <label for="min_dob">Minimum Date of Birth:</label>
+    <select name="min_dob" id="min_dob">
+      <option value="">All</option>
+      {% for year in year_range %}
+        <option value="{{ year }}">{{ year }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="max_dob">Maximum Date of Birth:</label>
+    <select name="max_dob" id="max_dob">
+      <option value="">All</option>
+      {% for year in year_range %}
+        <option value="{{ year }}">{{ year }}</option>
+      {% endfor %}
+    </select>
+
+    <label for="voter_score">Voter Score:</label>
+    <select name="voter_score" id="voter_score">
+      <option value="">All</option>
+      {% for score in voter_scores %}
+        <option value="{{ score }}">{{ score }}</option>
+      {% endfor %}
+    </select>
+
+    <div>
+      <label><input type="checkbox" name="v20state" value="True"> Voted in 2020 State Election</label>
+      <label><input type="checkbox" name="v21town" value="True"> Voted in 2021 Town Election</label>
+      <label><input type="checkbox" name="v21primary" value="True"> Voted in 2021 Primary</label>
+      <label><input type="checkbox" name="v22general" value="True"> Voted in 2022 General Election</label>
+      <label><input type="checkbox" name="v23town" value="True"> Voted in 2023 Town Election</label>
+    </div>
+
+    <button type="submit">Filter</button>
+  </form>
+
+  <table>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Street Address</th>
+      <th>Date of Birth</th>
+      <th>Party Affiliation</th>
+      <th>Voter Score</th>
+      <th>Details</th>
+    </tr>
+    {% for voter in voters %}
+      <tr>
+        <td>{{ voter.first_name }}</td>
+        <td>{{ voter.last_name }}</td>
+        <td>{{ voter.street_number }} {{ voter.street_name }}</td>
+        <td>{{ voter.date_of_birth }}</td>
+        <td>{{ voter.party_affiliation }}</td>
+        <td>{{ voter.voter_score }}</td>
+        <td><a href="{% url 'voter' voter.pk %}" class="button">Details</a></td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <!-- Navigate between different pages of a paginated QuerySet -->
+  {% if is_paginated %}
+    <div class="pagination">
+      {% if page_obj.has_previous %}
+        <a href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+      {% if page_obj.has_next %}
+        <a href="?{% if request.GET %}{{ request.GET.urlencode }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+      {% endif %}
+    </div>
+  {% endif %}
+
+  <!-- Navigation Links -->
+  <p><a href="{% url 'graphs' %}" class="button">View Graphs</a></p>
+{% endblock %}
