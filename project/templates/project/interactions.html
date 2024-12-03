@@ -1,0 +1,12 @@
+{% extends 'project/base.html' %}
+
+{% block title %}Check Interactions{% endblock %}
+
+{% block content %}
+<h2>Potential Interactions</h2>
+<ul>
+    {% for interaction in interactions %}
+        <li>{{ interaction.medicine1.name }} and {{ interaction.medicine2.name }}: {{ interaction.description }} ({{ interaction.severity_level }})</li>
+    {% endfor %}
+</ul>
+{% endblock %}

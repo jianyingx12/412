@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <title>{% block title %}Med Schedule{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'project/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Med Schedule</h1>
+        <nav>
+            <ul>
+                <li><a href="/medicines/">Medicines</a></li>
+                <li><a href="/add_schedule/">Add Schedule</a></li>
+                <li><a href="/check_interactions/">Check Interactions</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Specific content for each page goes here -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Med Schedule</p>
+    </footer>
+</body>
+</html>

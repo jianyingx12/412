@@ -1,0 +1,37 @@
+{% extends 'project/base.html' %}
+
+{% block title %}My Weekly Schedule{% endblock %}
+
+{% block content %}
+<h2>Your Weekly Medicine Schedule</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Day</th>
+            <th>Medicines</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for day, schedules in weekly_schedule.items %}
+        <tr>
+            <td>{{ day }}</td>
+            <td>
+                {% if schedules %}
+                    <ul>
+                        {% for schedule in schedules %}
+                            <li>
+                                <strong>{{ schedule.medicine.name }}</strong>: 
+                                {{ schedule.dosage }} at {{ schedule.time_of_day }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <em>No medicines scheduled</em>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

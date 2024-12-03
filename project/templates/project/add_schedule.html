@@ -1,0 +1,12 @@
+{% extends 'project/base.html' %}
+
+{% block title %}Add Schedule{% endblock %}
+
+{% block content %}
+<h2>Add Medicine to Schedule</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Add</button>
+</form>
+{% endblock %}
