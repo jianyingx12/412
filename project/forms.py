@@ -16,3 +16,6 @@ class ScheduleForm(forms.ModelForm):
             'end_date',       # The date when the user stops taking the medicine
             'time',           # The specific time of day to take the medicine
         ]
+
+class MedicineSearchForm(forms.Form):
+    query = forms.CharField(label="Search Medicine", max_length=100)

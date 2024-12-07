@@ -2,6 +2,11 @@ from django.views.generic import ListView, CreateView, TemplateView
 from django.shortcuts import redirect
 from .models import Medicine, Schedule, Interaction
 from .forms import ScheduleForm  
+from datetime import timedelta, date
+from django.utils.timezone import now
+import requests
+from django.shortcuts import render
+from .forms import MedicineSearchForm
 
 # Medicine List View
 class MedicineListView(ListView):
@@ -9,7 +14,7 @@ class MedicineListView(ListView):
     Displays all medicines stored in the database.
     """
     model = Medicine
-    template_name = 'medicines.html'  # Template for the medicine list
+    template_name = 'project/medicines.html'  # Template for the medicine list
     context_object_name = 'medicines'  # Variable to use in the template
 
 
@@ -20,7 +25,7 @@ class ScheduleCreateView(CreateView):
     """
     model = Schedule
     form_class = ScheduleForm
-    template_name = 'add_schedule.html'  # Template for the form
+    template_name = 'project/add_schedule.html'  # Template for the form
     success_url = '/schedules/'  # Redirect URL after successful submission
 
     def form_valid(self, form):
@@ -37,7 +42,7 @@ class InteractionCheckView(TemplateView):
     """
     Checks for potential interactions between scheduled medicines.
     """
-    template_name = 'interactions.html'
+    template_name = 'project/interactions.html'
 
     def get_context_data(self, **kwargs):
         """
@@ -63,32 +68,108 @@ class InteractionCheckView(TemplateView):
 
 # Weekly Schedule View
 class ScheduleView(TemplateView):
-    """
-    Displays a weekly schedule of medicines.
-    """
     template_name = 'project/schedule.html'
 
     def get_context_data(self, **kwargs):
         """
-        Add the user's weekly schedule to the context.
+        Add the user's weekly schedule and navigation dates to the context.
         """
         context = super().get_context_data(**kwargs)
 
-        # Query schedules for now
-        schedules = Schedule.objects.all().order_by('time')
+        # Get the current week or a specific week from query parameters
+        week_start = self.request.GET.get('week_start')
+        if week_start:
+            try:
+                week_start = date.fromisoformat(week_start)  # Parse date from query string
+            except ValueError:
+                week_start = now().date()  # Default to current date if invalid
+        else:
+            today = now().date()
+            # Calculate the most recent Sunday
+            week_start = today - timedelta(days=(today.weekday() + 1) % 7)
+
+        # Calculate the end of the week (Saturday)
+        week_end = week_start + timedelta(days=6)
+
+        # Calculate previous and next weeks for navigation
+        context['previous_week'] = week_start - timedelta(days=7)
+        context['next_week'] = week_start + timedelta(days=7)
+
+        # Filter schedules for the selected week
+        schedules = Schedule.objects.filter(
+            start_date__lte=week_end,  # Schedules that started before the end of the week
+            end_date__gte=week_start  # Schedules that end after the start of the week
+        ).order_by('time')
 
         # Organize schedules by day of the week
-        days_of_week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        days_of_week = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
         weekly_schedule = {day: [] for day in days_of_week}
-        non_day_schedules = []  # Group schedules that don't match a day
 
         for schedule in schedules:
-            if schedule.frequency in weekly_schedule:
-                weekly_schedule[schedule.frequency].append(schedule)
-            else:
-                non_day_schedules.append(schedule)  # Add non-day schedules separately
+            # Calculate the day of the week for the schedule based on start_date
+            schedule_day_index = (schedule.start_date - week_start).days
+            if 0 <= schedule_day_index <= 6:  # Ensure it falls within the week range
+                day_name = days_of_week[schedule_day_index]
+                weekly_schedule[day_name].append(schedule)
 
         context['weekly_schedule'] = weekly_schedule
-        context['non_day_schedules'] = non_day_schedules  # Pass non-day schedules to the template
+        context['week_start'] = week_start
+        context['week_end'] = week_end
+        return context
+    
+class MedicineDetailView(TemplateView):
+    template_name = 'project/medicine_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['medicine'] = self.request.GET.dict()  # Pass all details as context
         return context
 
+class MedicineSearchView(TemplateView):
+    template_name = 'project/medicine_search.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = MedicineSearchForm()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        form = MedicineSearchForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data['query']
+
+            BASE_URL = "https://api.fda.gov/drug/label.json"
+            params = {
+                "search": f'openfda.brand_name:"{query}" OR openfda.generic_name:"{query}"',
+                "limit": 15
+            }
+
+            try:
+                response = requests.get(BASE_URL, params=params)
+                response.raise_for_status()
+                data = response.json()
+                results = data.get("results", [])
+
+                medicines = []
+                for result in results:
+                    medicine_info = {
+                        "brand_name": result.get("openfda", {}).get("brand_name", ["N/A"])[0],
+                        "manufacturer": result.get("openfda", {}).get("manufacturer_name", ["N/A"])[0],
+                        "details": {  # Details for the view details button
+                            "brand_name": result.get("openfda", {}).get("brand_name", ["N/A"])[0],
+                            "generic_name": result.get("openfda", {}).get("generic_name", ["N/A"])[0],
+                            "manufacturer": result.get("openfda", {}).get("manufacturer_name", ["N/A"])[0],
+                            "category": result.get("openfda", {}).get("pharmacologic_class", ["N/A"])[0],
+                            "dosage_info": result.get("dosage_and_administration", ["N/A"])[0],
+                            "side_effects": result.get("adverse_reactions", ["N/A"])[0] or result.get("warnings_and_precautions", ["N/A"])[0],
+                            "purpose": result.get("purpose", ["N/A"])[0],
+                            "indications_and_usage": result.get("indications_and_usage", ["N/A"])[0],
+                        }
+                    }
+                    medicines.append(medicine_info)
+
+                return render(request, self.template_name, {'form': form, 'medicines': medicines})
+            except requests.exceptions.RequestException as e:
+                return render(request, self.template_name, {'form': form, 'error': f"An error occurred: {str(e)}"})
+        else:
+            return render(request, self.template_name, {'form': form, 'error': 'Invalid input. Please try again.'})

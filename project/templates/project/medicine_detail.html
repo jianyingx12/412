@@ -1,0 +1,18 @@
+{% extends "project/base.html" %}
+
+{% block title %}Medicine Details{% endblock %}
+
+{% block content %}
+<h2>Medicine Details</h2>
+<ul>
+    <li><strong>Brand Name:</strong> {{ medicine.brand_name }}</li>
+    <li><strong>Generic Name:</strong> {{ medicine.generic_name }}</li>
+    <li><strong>Manufacturer:</strong> {{ medicine.manufacturer }}</li>
+    <li><strong>Category:</strong> {{ medicine.category }}</li>
+    <li><strong>Dosage Information:</strong> {{ medicine.dosage_info }}</li>
+    <li><strong>Side Effects:</strong> {{ medicine.side_effects }}</li>
+    <li><strong>Purpose:</strong> {{ medicine.purpose }}</li>
+    <li><strong>Indications and Usage:</strong> {{ medicine.indications_and_usage }}</li>
+</ul>
+<a href="{% url 'medicine_search' %}">Back to Search</a>
+{% endblock %}

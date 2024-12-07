@@ -1,0 +1,31 @@
+{% extends "project/base.html" %}
+
+{% block title %}Search Medicines{% endblock %}
+
+{% block content %}
+<h2>Search for a Medicine</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <label for="query">Search Medicine:</label>
+    <input type="text" id="query" name="query" placeholder="Enter medicine name">
+    <button type="submit">Search</button>
+</form>
+
+{% if medicines %}
+    <h3>Results:</h3>
+    <ul>
+        {% for medicine in medicines %}
+            <li>
+                <strong>Brand Name:</strong> {{ medicine.brand_name }}<br>
+                <strong>Manufacturer:</strong> {{ medicine.manufacturer }}<br>
+                <a href="{% url 'medicine_detail' %}?brand_name={{ medicine.details.brand_name }}&generic_name={{ medicine.details.generic_name }}&manufacturer={{ medicine.details.manufacturer }}&category={{ medicine.details.category }}&dosage_info={{ medicine.details.dosage_info }}&side_effects={{ medicine.details.side_effects }}&purpose={{ medicine.details.purpose }}&indications_and_usage={{ medicine.details.indications_and_usage }}">View Details</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% elif error %}
+    <p style="color: red;">{{ error }}</p>
+{% endif %}
+{% endblock %}
+
+

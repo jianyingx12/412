@@ -35,8 +35,8 @@ class Schedule(models.Model):
     '''
     user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)  # Links to the user's profile
     medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)  # Links to the medicine being scheduled
-    dosage = models.CharField(max_length=100)  # Dosage details (e.g., "2 pills")
-    frequency = models.CharField(max_length=100)  # Frequency (e.g., "Twice a day")
+    dosage = models.CharField(max_length=100)  # Dosage details 
+    frequency = models.CharField(max_length=100)  # Frequency 
     start_date = models.DateField()  # Start date for taking the medicine
     end_date = models.DateField()  # End date for taking the medicine
     time = models.TimeField()  # Time for taking the medicine
