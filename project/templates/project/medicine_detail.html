@@ -15,4 +15,21 @@
     <li><strong>Indications and Usage:</strong> {{ medicine.indications_and_usage }}</li>
 </ul>
 <a href="{% url 'medicine_search' %}">Back to Search</a>
+
+<form method="post" action="{% url 'add_to_medicines' %}">
+    {% csrf_token %}
+    <input type="hidden" name="name" value="{{ details.brand_name }}">
+    <input type="hidden" name="brand_name" value="{{ details.brand_name }}">
+    <input type="hidden" name="generic_name" value="{{ details.generic_name }}">
+    <input type="hidden" name="manufacturer" value="{{ details.manufacturer }}">
+    <input type="hidden" name="category" value="{{ details.category }}">
+    <input type="hidden" name="dosage_info" value="{{ details.dosage_info }}">
+    <input type="hidden" name="side_effects" value="{{ details.side_effects }}">
+    <input type="hidden" name="purpose" value="{{ details.purpose }}">
+    <input type="hidden" name="indications_and_usage" value="{{ details.indications_and_usage }}">
+    <a href="{% url 'add_to_medicines' %}?brand_name={{ medicine.brand_name }}&generic_name={{ medicine.generic_name }}&manufacturer={{ medicine.manufacturer }}&category={{ medicine.category }}&dosage_info={{ medicine.dosage_info|urlencode }}&side_effects={{ medicine.side_effects|urlencode }}&purpose={{ medicine.purpose|urlencode }}&indications_and_usage={{ medicine.indications_and_usage|urlencode }}" class="btn btn-primary">
+        Add to your Medicines
+    </a>
+</form>
+
 {% endblock %}

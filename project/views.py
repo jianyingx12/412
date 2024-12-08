@@ -1,5 +1,6 @@
-from django.views.generic import ListView, CreateView, TemplateView
+from django.views.generic import ListView, CreateView, TemplateView, DeleteView
 from django.shortcuts import redirect
+from django.urls import reverse
 from .models import Medicine, Schedule, Interaction
 from .forms import ScheduleForm  
 from datetime import timedelta, date
@@ -7,6 +8,7 @@ from django.utils.timezone import now
 import requests
 from django.shortcuts import render
 from .forms import MedicineSearchForm
+from django.contrib import messages
 
 # Medicine List View
 class MedicineListView(ListView):
@@ -35,7 +37,6 @@ class ScheduleCreateView(CreateView):
         # Commented out user association until user handling is added
         # form.instance.user_profile = self.request.user.userprofile
         return super().form_valid(form)
-
 
 # Drug Interaction Check View
 class InteractionCheckView(TemplateView):
@@ -125,6 +126,32 @@ class MedicineDetailView(TemplateView):
         context['medicine'] = self.request.GET.dict()  # Pass all details as context
         return context
 
+class MedicineDetailFromListView(TemplateView):
+    template_name = 'project/medicine_detail_from_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        medicine_id = self.request.GET.get('id')  # Get the medicine ID from the URL query parameter
+        try:
+            medicine = Medicine.objects.get(id=medicine_id)
+            context['medicine'] = medicine
+        except Medicine.DoesNotExist:
+            context['medicine'] = None
+        return context
+
+class MedicineDeleteView(DeleteView):
+    """
+    Handles the deletion of a Medicine instance.
+    """
+    model = Medicine
+    template_name = 'project/medicine_confirm_delete.html'  # Confirmation page
+
+    def get_success_url(self):
+        """
+        Redirects to the list of medicines after deletion.
+        """
+        return reverse('medicines')
+
 class MedicineSearchView(TemplateView):
     template_name = 'project/medicine_search.html'
 
@@ -133,7 +160,7 @@ class MedicineSearchView(TemplateView):
         context['form'] = MedicineSearchForm()
         return context
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request):
         form = MedicineSearchForm(request.POST)
         if form.is_valid():
             query = form.cleaned_data['query']
@@ -173,3 +200,36 @@ class MedicineSearchView(TemplateView):
                 return render(request, self.template_name, {'form': form, 'error': f"An error occurred: {str(e)}"})
         else:
             return render(request, self.template_name, {'form': form, 'error': 'Invalid input. Please try again.'})
+        
+def add_to_medicines(request):
+    """
+    Adds a new medicine to the database from the GET request parameters.
+    """
+    if request.method == "GET":
+        brand_name = request.GET.get("brand_name")
+        generic_name = request.GET.get("generic_name")
+        manufacturer = request.GET.get("manufacturer")
+        category = request.GET.get("category")
+        dosage_info = request.GET.get("dosage_info")
+        side_effects = request.GET.get("side_effects")
+        purpose = request.GET.get("purpose")
+        indications_and_usage = request.GET.get("indications_and_usage")
+
+        # Avoid duplicate entries by checking if it already exists
+        if Medicine.objects.filter(brand_name=brand_name).exists():
+            messages.warning(request, "This medicine is already in the database.")
+        else:
+            # Add the medicine to the database
+            Medicine.objects.create(
+                brand_name=brand_name,
+                generic_name=generic_name,
+                manufacturer=manufacturer,
+                category=category,
+                indications_and_usage=indications_and_usage,  
+                dosage_info=dosage_info,
+                side_effects=side_effects,
+                purpose=purpose,
+            )
+            messages.success(request, f"Medicine '{brand_name}' added successfully!")
+
+        return redirect("medicines")  # Redirect to the medicine list

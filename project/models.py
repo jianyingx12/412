@@ -2,17 +2,26 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Medicine(models.Model):
-    '''
-    The Medicine model represents individual medicines. 
-    '''
-    name = models.CharField(max_length=100)  # Name of the medicine (e.g., Ibuprofen, Warfarin)
-    category = models.CharField(max_length=100)  # Category of the medicine (e.g., NSAID, anticoagulant)
-    common_uses = models.TextField()  # Text description of common uses (e.g., pain relief, blood thinning)
-    dosage_info = models.TextField()  # Information about standard dosage
-    side_effects = models.TextField()  # Information about possible side effects
+    """
+    The Medicine model represents individual medicines.
+    """
+    name = models.CharField(max_length=100, null=True, blank=True)  # Automatically populated
+    brand_name = models.CharField(max_length=100, blank=True, null=True)
+    generic_name = models.CharField(max_length=100, blank=True, null=True)
+    manufacturer = models.CharField(max_length=200, blank=True, null=True)
+    category = models.CharField(max_length=100, blank=True, null=True)
+    dosage_info = models.TextField(blank=True, null=True)
+    side_effects = models.TextField(blank=True, null=True)
+    purpose = models.TextField(blank=True, null=True)
+    indications_and_usage = models.TextField(blank=True, null=True)
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = self.brand_name or "Unknown Medicine"
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return self.name
+        return self.name or "Unknown Medicine"
 
 
 class UserProfile(models.Model):
@@ -33,7 +42,7 @@ class Schedule(models.Model):
     The Schedule model ties a UserProfile to a specific Medicine.
     It represents the schedule for taking a particular medicine, including dosage and timing information.
     '''
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)  # Links to the user's profile
+    #user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)  # Links to the user's profile
     medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)  # Links to the medicine being scheduled
     dosage = models.CharField(max_length=100)  # Dosage details 
     frequency = models.CharField(max_length=100)  # Frequency 
