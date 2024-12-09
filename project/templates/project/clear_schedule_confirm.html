@@ -1,0 +1,14 @@
+{% extends 'project/base.html' %}
+
+{% block title %}Clear Schedule{% endblock %}
+
+{% block content %}
+<h2>Clear Schedule Confirmation</h2>
+<p>Are you sure you want to remove all medicines from your schedule? This action cannot be undone.</p>
+
+<form method="post" action="{% url 'clear_schedule' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, Clear All</button>
+    <a href="{% url 'project_home' %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}

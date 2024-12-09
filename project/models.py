@@ -38,22 +38,33 @@ class UserProfile(models.Model):
         return self.user.username
 
 class Schedule(models.Model):
-    '''
+    """
     The Schedule model ties a UserProfile to a specific Medicine.
     It represents the schedule for taking a particular medicine, including dosage and timing information.
-    '''
-    #user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)  # Links to the user's profile
+    """
+    # user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE)  # Links to the user's profile
     medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)  # Links to the medicine being scheduled
-    dosage = models.CharField(max_length=100)  # Dosage details 
-    frequency = models.CharField(max_length=100)  # Frequency 
+    dosage = models.CharField(max_length=100)  # Dosage details
+    FREQUENCY_CHOICES = [
+        ('once', 'Once (one-time use)'),
+        ('daily', 'Daily'),
+        ('twice_daily', 'Twice Daily'),
+        ('every_4_hours', 'Every 4 hours'),
+        ('every_8_hours', 'Every 8 hours'),
+        ('weekly', 'Weekly'),
+        ('every_other_day', 'Every Other Day'),
+    ]
+    frequency = models.CharField(
+        max_length=50,
+        choices=FREQUENCY_CHOICES,
+        default='daily'  # Default to 'Daily'
+    )  # Frequency
     start_date = models.DateField()  # Start date for taking the medicine
     end_date = models.DateField()  # End date for taking the medicine
     time = models.TimeField()  # Time for taking the medicine
 
     def __str__(self):
-        return f"{self.medicine.name} for {self.user_profile.user.username}"
-
-
+        return f"{self.medicine.name} scheduled for {self.frequency}"
 
 class Interaction(models.Model):
     '''

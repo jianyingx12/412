@@ -6,8 +6,9 @@
 <h2>Your Weekly Medicine Schedule</h2>
 
 <div>
-    <!-- Navigation for previous and next weeks -->
+    <!-- Navigation for previous, current, and next weeks -->
     <a href="?week_start={{ previous_week|date:"Y-m-d" }}">Previous Week</a> |
+    <a href="{% url 'project_home' %}">Current Week</a> |
     <a href="?week_start={{ next_week|date:"Y-m-d" }}">Next Week</a>
 </div>
 
@@ -31,6 +32,8 @@
                             <li>
                                 <strong>{{ schedule.medicine.name }}</strong>: 
                                 {{ schedule.dosage }} at {{ schedule.time }}
+                                <a href="{% url 'edit_schedule' schedule.id %}" class="btn btn-secondary">Edit</a>
+                                <a href="{% url 'delete_med' schedule.id %}" class="btn btn-danger">Delete</a>
                             </li>
                         {% endfor %}
                     </ul>
@@ -42,4 +45,9 @@
         {% endfor %}
     </tbody>
 </table>
+
+<!-- Clear Schedule Link -->
+<div>
+    <a href="{% url 'clear_schedule' %}" class="btn btn-warning">Clear Schedule</a>
+</div>
 {% endblock %}
