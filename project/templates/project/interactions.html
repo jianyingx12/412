@@ -1,12 +1,54 @@
 {% extends 'project/base.html' %}
 
-{% block title %}Check Interactions{% endblock %}
+{% block title %}Interactions{% endblock %}
 
 {% block content %}
-<h2>Potential Interactions</h2>
-<ul>
-    {% for interaction in interactions %}
-        <li>{{ interaction.medicine1.name }} and {{ interaction.medicine2.name }}: {{ interaction.description }} ({{ interaction.severity_level }})</li>
-    {% endfor %}
-</ul>
+<h2>All Interactions</h2>
+<!-- Heading for the interactions page -->
+
+<table>
+    <thead>
+        <tr>
+            <th>Medicine 1</th>
+            <th>Medicine 2</th>
+            <th>Interaction Type</th>
+            <th>Severity Level</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for interaction in interactions %}
+        <tr>
+            <td>{{ interaction.medicine1.name }}</td>
+            <td>{{ interaction.medicine2.name }}</td>
+            <td>{{ interaction.interaction_type }}</td>
+            <td>{{ interaction.severity_level }}</td>
+            <td>{{ interaction.description }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No interactions found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Pagination Controls -->
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 {% endblock %}

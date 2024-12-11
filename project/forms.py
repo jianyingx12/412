@@ -1,6 +1,46 @@
 from django import forms
-from .models import Schedule
+from .models import Schedule, UserProfile
 from django.core.exceptions import ValidationError
+
+class CreateProfileForm(forms.ModelForm):
+    """
+    Form to create a new UserProfile instance.
+    """
+    class Meta:
+        model = UserProfile
+        fields = ['first_name', 'last_name', 'email', 'age', 'weight', 'allergies', 'medical_conditions']
+        widgets = {
+            'allergies': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter any allergies'}),
+            'medical_conditions': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter any medical conditions'}),
+        }
+        labels = {
+            'first_name': 'First Name',
+            'last_name': 'Last Name',
+            'email': 'Email Address',
+            'age': 'Age',
+            'weight': 'Weight (kg)',
+            'allergies': 'Allergies',
+            'medical_conditions': 'Medical Conditions',
+        }
+
+class UpdateProfileForm(forms.ModelForm):
+    """
+    A form to update a profile, excluding first name and last name.
+    """
+    class Meta:
+        model = UserProfile
+        fields = ['email', 'age', 'weight', 'allergies', 'medical_conditions']
+        widgets = {
+            'allergies': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter any allergies'}),
+            'medical_conditions': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Enter any medical conditions'}),
+        }
+        labels = {
+            'email': 'Email Address',
+            'age': 'Age',
+            'weight': 'Weight (kg)',
+            'allergies': 'Allergies',
+            'medical_conditions': 'Medical Conditions',
+        }
 
 class ScheduleForm(forms.ModelForm):
     class Meta:

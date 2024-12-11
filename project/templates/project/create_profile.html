@@ -1,0 +1,24 @@
+{% extends "project/base.html" %}
+
+{% block title %}Create Profile{% endblock %}
+
+{% block content %}
+<h2>Create Your Profile</h2>
+<!-- Heading for the profile creation page -->
+
+<form method="post">
+    {% csrf_token %}
+    <!-- Form for creating a profile with CSRF protection -->
+    
+    <h3>Account Details</h3>
+    {{ user_form.as_p }}
+    <!-- Render the user account form fields -->
+
+    <h3>Profile Details</h3>
+    {{ form.as_p }}
+    <!-- Render the profile-specific form fields -->
+
+    <button type="submit" class="btn btn-primary">Create Profile</button>
+    <!-- Submit button for creating the profile -->
+</form>
+{% endblock %}

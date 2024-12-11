@@ -4,32 +4,58 @@
 
 {% block content %}
 <h2>Medicine Details</h2>
+<!-- Page heading for medicine details -->
+
 <ul>
     <li><strong>Brand Name:</strong> {{ medicine.brand_name }}</li>
+    <!-- Display the brand name of the medicine -->
     <li><strong>Generic Name:</strong> {{ medicine.generic_name }}</li>
+    <!-- Display the generic name of the medicine -->
     <li><strong>Manufacturer:</strong> {{ medicine.manufacturer }}</li>
+    <!-- Display the manufacturer of the medicine -->
     <li><strong>Category:</strong> {{ medicine.category }}</li>
+    <!-- Display the category of the medicine -->
     <li><strong>Dosage Information:</strong> {{ medicine.dosage_info }}</li>
+    <!-- Display the dosage information of the medicine -->
     <li><strong>Side Effects:</strong> {{ medicine.side_effects }}</li>
+    <!-- Display the side effects of the medicine -->
     <li><strong>Purpose:</strong> {{ medicine.purpose }}</li>
+    <!-- Display the purpose of the medicine -->
     <li><strong>Indications and Usage:</strong> {{ medicine.indications_and_usage }}</li>
+    <!-- Display the indications and usage of the medicine -->
 </ul>
+
 <a href="{% url 'medicine_search' %}">Back to Search</a>
+<!-- Link to navigate back to the medicine search page -->
 
 <form method="post" action="{% url 'add_to_medicines' %}">
     {% csrf_token %}
+    <!-- Form for adding medicine details with CSRF protection -->
+
     <input type="hidden" name="name" value="{{ details.brand_name }}">
+    <!-- Hidden input to pass the brand name -->
     <input type="hidden" name="brand_name" value="{{ details.brand_name }}">
+    <!-- Hidden input to pass the brand name -->
     <input type="hidden" name="generic_name" value="{{ details.generic_name }}">
+    <!-- Hidden input to pass the generic name -->
     <input type="hidden" name="manufacturer" value="{{ details.manufacturer }}">
+    <!-- Hidden input to pass the manufacturer -->
     <input type="hidden" name="category" value="{{ details.category }}">
+    <!-- Hidden input to pass the category -->
     <input type="hidden" name="dosage_info" value="{{ details.dosage_info }}">
+    <!-- Hidden input to pass the dosage information -->
     <input type="hidden" name="side_effects" value="{{ details.side_effects }}">
+    <!-- Hidden input to pass the side effects -->
     <input type="hidden" name="purpose" value="{{ details.purpose }}">
+    <!-- Hidden input to pass the purpose -->
     <input type="hidden" name="indications_and_usage" value="{{ details.indications_and_usage }}">
+    <!-- Hidden input to pass the indications and usage -->
+
     <a href="{% url 'add_to_medicines' %}?brand_name={{ medicine.brand_name }}&generic_name={{ medicine.generic_name }}&manufacturer={{ medicine.manufacturer }}&category={{ medicine.category }}&dosage_info={{ medicine.dosage_info|urlencode }}&side_effects={{ medicine.side_effects|urlencode }}&purpose={{ medicine.purpose|urlencode }}&indications_and_usage={{ medicine.indications_and_usage|urlencode }}" class="btn btn-primary">
         Add to your Medicines
     </a>
+    <!-- Link to add the medicine to the user's list -->
 </form>
 
 {% endblock %}
+

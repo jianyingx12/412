@@ -4,11 +4,16 @@
 
 {% block content %}
 <h2>Clear Schedule Confirmation</h2>
+<!-- Heading to indicate the action -->
+
 <p>Are you sure you want to remove all medicines from your schedule? This action cannot be undone.</p>
+<!-- Warning message about the action -->
 
 <form method="post" action="{% url 'clear_schedule' %}">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Yes, Clear All</button>
+    <!-- Button to confirm clearing the schedule -->
     <a href="{% url 'project_home' %}" class="btn btn-secondary">Cancel</a>
+    <!-- Link to cancel the action and return to the home page -->
 </form>
 {% endblock %}

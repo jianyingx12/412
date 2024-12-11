@@ -3,29 +3,54 @@
 <html lang="en">
 <head>
     <title>{% block title %}Med Schedule{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'project/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'project/styles.css' %}?v={{ timestamp|date:'U' }}">
+    <!-- Link to the stylesheet with cache-busting using a timestamp -->
 </head>
 <body>
     <header>
         <h1>Med Schedule</h1>
+        <!-- Main header title -->
         <nav>
             <ul>
                 <li><a href="/project">Your Schedule</a></li>
-                <li><a href="/project/medicines/">Your Medicines</a></li>
+                <!-- Navigation link to view the user's schedule -->
+                <li><a href="/project/medicines/">Medicines</a></li>
+                <!-- Navigation link to view the list of medicines -->
                 <li><a href="/project/add_to_schedule/">Add to Schedule</a></li>
+                <!-- Navigation link to add a new schedule -->
                 <li><a href="/project/check_interactions/">Check Interactions</a></li>
+                <!-- Navigation link to check medicine interactions -->
                 <li><a href="/project/medicine_search/">Search For Medicines</a></li>
+                <!-- Navigation link to search for medicines -->
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'view_profile' %}">View Profile</a></li>
+                    <!-- Navigation link to view the user's profile -->
+                    <li>
+                        <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="logout-btn">Logout</button>
+                            <!-- Logout button -->
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <!-- Navigation link to the login page -->
+                    <li><a href="/project/create_profile/">Create Profile</a></li>
+                    <!-- Navigation link to create a profile -->
+                {% endif %}
             </ul>
         </nav>
-    </header>
+    </header>    
 
     <main>
         {% block content %}
         {% endblock %}
     </main>
+    <!-- Main content area -->
 
     <footer>
         <p>&copy; 2024 Med Schedule</p>
+        <!-- Footer with copyright information -->
     </footer>
 </body>
 </html>

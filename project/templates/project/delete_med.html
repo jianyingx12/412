@@ -4,11 +4,16 @@
 
 {% block content %}
 <h2>Confirm Delete</h2>
+<!-- Heading for delete confirmation -->
+
 <p>Are you sure you want to delete <strong>{{ object.medicine.name }}</strong> scheduled for {{ object.time }} {{ object.frequency }}?</p>
+<!-- Message showing details of the medicine to be deleted -->
 
 <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    <!-- Button to confirm the deletion -->
     <a href="{% url 'project_home' %}" class="btn btn-secondary">Cancel</a>
+    <!-- Link to cancel and go back to the home page -->
 </form>
 {% endblock %}

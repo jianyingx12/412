@@ -3,10 +3,14 @@
 {% block title %}Add Schedule{% endblock %}
 
 {% block content %}
+<!-- Main content block -->
 <h2>Add Medicine to Schedule</h2>
 <form method="post">
     {% csrf_token %}
+    <!-- Include CSRF token for security -->
     {{ form.as_p }}
+    <!-- Render the form fields -->
     <button type="submit">Add to Schedule</button>
+    <!-- Submit button for the form -->
 </form>
 {% endblock %}
