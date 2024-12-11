@@ -145,7 +145,6 @@ class MedicineListView(ListView):
     context_object_name = 'medicines'  # Variable to use in the template
     paginate_by = 100 # pagination by 100
 
-# Add Medicine to Schedule View
 class ScheduleCreateView(CreateView):
     """
     Allows users to add a medicine to the schedule using a form.
@@ -160,6 +159,9 @@ class ScheduleCreateView(CreateView):
         Handle the form validation and create multiple schedule entries based on the frequency.
         """
         schedule = form.save(commit=False)
+
+        # Ensure the schedule is associated with the logged-in user
+        schedule.user = self.request.user
 
         # Extract relevant data
         start_date = schedule.start_date
@@ -204,7 +206,8 @@ class ScheduleCreateView(CreateView):
                     frequency=frequency,
                     start_date=current_datetime.date(),
                     end_date=end_date,  # Store the original end date
-                    time=current_datetime.time()
+                    time=current_datetime.time(),
+                    user=self.request.user  # Associate with the logged-in user
                 ))
 
             # Increment the datetime
@@ -224,6 +227,7 @@ class ScheduleCreateView(CreateView):
         Schedule.objects.bulk_create(schedules)
 
         return redirect(self.success_url)
+
 
 # Weekly Schedule View
 class ScheduleView(TemplateView):
@@ -463,8 +467,6 @@ class ScheduleUpdateView(LoginRequiredMixin, UpdateView):
         """
         from django.urls import reverse
         return reverse('project_home')  # Redirect to the project home page
-
-
 
 class DeleteScheduleView(LoginRequiredMixin, DeleteView):
     """
