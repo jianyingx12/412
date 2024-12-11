@@ -442,18 +442,28 @@ class ScheduleUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         """
         Restrict access to the schedule based on ownership.
+        Ensures the logged-in user can only update their own schedules.
         """
-        schedule = super().get_object(queryset)
-        # Check if the schedule belongs to the current user
-        if schedule.user != self.request.user:
-            return HttpResponseForbidden("You are not allowed to edit this schedule.")
+        schedule = super().get_object(queryset)  # Get the schedule instance
+        if schedule.user != self.request.user:  # Verify ownership
+            # If the user is not the owner, return None or redirect to a safe page
+            return None
         return schedule
+
+    def form_invalid(self, form):
+        """
+        If the form is invalid, provide a clear error message.
+        """
+        return self.render_to_response(self.get_context_data(form=form))
 
     def get_success_url(self):
         """
-        Redirect after a successful update.
+        Define the URL to redirect to after a successful update.
+        Redirects back to the schedule page.
         """
-        return reverse('project_home')
+        from django.urls import reverse
+        return reverse('project_home')  # Redirect to the project home page
+
 
 
 class DeleteScheduleView(LoginRequiredMixin, DeleteView):
