@@ -435,57 +435,50 @@ class ScheduleUpdateView(LoginRequiredMixin, UpdateView):
     Allows users to update an existing schedule.
     Ensures that only the owner of the schedule can make modifications.
     """
-    model = Schedule  # Specifies the model this view will update
-    form_class = ScheduleForm  # Specifies the form class to use for editing
-    template_name = 'project/edit_schedule.html'  # Template to render the update form
+    model = Schedule
+    form_class = ScheduleForm
+    template_name = 'project/edit_schedule.html'
 
     def get_object(self, queryset=None):
         """
-        Override the method to restrict access.
-        Ensures the logged-in user can only update their own schedules.
+        Restrict access to the schedule based on ownership.
         """
-        schedule = super().get_object(queryset)  # Get the schedule instance
-        # Check if the schedule belongs to the current user's profile
-        if schedule.user_profile != self.request.user.userprofile:
-            # Raise an error if the user is not authorized
-            raise HttpResponseForbidden("You are not allowed to edit this schedule.")
-        return schedule  # Return the schedule instance for editing
+        schedule = super().get_object(queryset)
+        # Check if the schedule belongs to the current user
+        if schedule.user != self.request.user:
+            return HttpResponseForbidden("You are not allowed to edit this schedule.")
+        return schedule
 
     def get_success_url(self):
         """
-        Define the URL to redirect to after a successful update.
-        Redirects back to the project home page.
+        Redirect after a successful update.
         """
-        return reverse('project_home')  # URL name for the home page of the project
+        return reverse('project_home')
 
 
 class DeleteScheduleView(LoginRequiredMixin, DeleteView):
     """
-    Allows users to delete a specific schedule.
-    Ensures that only the owner of the schedule can delete it.
+    View to delete a medicine from the schedule.
     """
-    model = Schedule  # Specifies the model this view will delete
-    template_name = 'project/delete_med.html'  # Template to confirm the deletion
+    model = Schedule
+    template_name = 'project/delete_med.html'
 
     def get_object(self, queryset=None):
         """
-        Override the method to restrict access.
-        Ensures the logged-in user can only delete their own schedules.
+        Override get_object to ensure that only the logged-in user's schedule can be accessed.
         """
-        schedule = super().get_object(queryset)  # Get the schedule instance
-        # Check if the schedule belongs to the current user's profile
-        if schedule.user_profile != self.request.user.userprofile:
-            # Raise an error if the user is not authorized
-            raise HttpResponseForbidden("You are not allowed to delete this schedule.")
-        return schedule  # Return the schedule instance for deletion
+        obj = super().get_object(queryset)
+        # Ensure the logged-in user matches the schedule's user
+        if obj.user == self.request.user:
+            return obj
+        # Return None if the user does not match
+        return None
 
     def get_success_url(self):
         """
-        Define the URL to redirect to after a successful deletion.
-        Redirects to the current week's schedule on the home page.
+        Redirect to the schedule page after deleting.
         """
-        return reverse('project_home')  # URL name for the home page of the project
-
+        return reverse('project_home')
     
 class ClearScheduleConfirmView(LoginRequiredMixin, View):
     """
@@ -498,5 +491,5 @@ class ClearScheduleConfirmView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         # Delete all schedules for the logged-in user
-        Schedule.objects.filter(user_profile=request.user.userprofile).delete()
+        Schedule.objects.filter(user=request.user).delete()
         return redirect('project_home')  # Redirect to the home page
