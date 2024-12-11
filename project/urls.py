@@ -2,8 +2,9 @@ from django.urls import path
 from .views import MedicineListView, ScheduleCreateView, InteractionListView, ScheduleView, MedicineSearchView
 from .views import MedicineDetailView, MedicineDetailFromListView, MedicineDeleteView, ScheduleUpdateView
 from .views import DeleteScheduleView, ClearScheduleConfirmView
-from .views import UserLoginView, CreateProfileView, UpdateProfileView, ViewProfileView
+from .views import CreateProfileView, UpdateProfileView, ViewProfileView
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LoginView
 from . import views
 
 urlpatterns = [
@@ -22,6 +23,6 @@ urlpatterns = [
     path(r'create_profile/', CreateProfileView.as_view(), name='create_profile'),
     path(r'update_profile/', UpdateProfileView.as_view(), name='update_profile'),
     path(r'view_profile/', ViewProfileView.as_view(), name='view_profile'),
-    path(r'login/', UserLoginView.as_view(), name='login'),
+    path(r'login/', LoginView.as_view(template_name='project/login.html'), name='login'),
     path(r'logout/', auth_views.LogoutView.as_view(template_name='project/logout.html'), name='logout'),
 ]
